@@ -45,7 +45,7 @@ def load_image(filename, transparent=False):
 # ---------------------------------------------------------------------
 
 def main():
-    SPEED = 50
+    SPEED = 39
     POSX = 0
     POSY = 0
 
@@ -63,13 +63,25 @@ def main():
             elif eventos.type == pygame.KEYDOWN:
                 print(eventos.key)
                 if eventos.key == K_LEFT:
-                    POSX -= SPEED
+                    if POSX == 0:
+                        pass
+                    else:
+                        POSX -= SPEED
                 elif eventos.key == K_RIGHT:
-                    POSX += SPEED
+                    if POSX == 1209:
+                        pass
+                    else:
+                        POSX += SPEED
                 elif eventos.key == K_UP:
-                    POSY -= SPEED
+                    if POSY == 0:
+                        pass
+                    else:
+                        POSY -= SPEED
                 elif eventos.key == K_DOWN:
-                    POSY += SPEED
+                    if POSY == 429:
+                        pass
+                    else:
+                        POSY += SPEED
 
 
         screen.fill(pygame.Color(255,255,9)) #color de fondo
