@@ -1,13 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# Módulos
 import pygame
 from pygame.locals import *
-
-# Constantes
-#WIDTH = 555
-#HEIGHT = 550
 
 WIDTH = 1300
 HEIGHT = 500
@@ -20,15 +12,14 @@ class Agentes(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image("imagenes/persona.png", True)
+        #self.image = pygame.image.load("imagenes/persona.png")
         self.image = pygame.transform.scale(self.image,(80,80))
-        #self.rect = self.image.get_rect()
-        #self.
-        #self.rect.centerx = WIDTH / 2
-        #self.rect.centery = HEIGHT / 2
-        #self.rect.top = HEIGHT / 2
-        #self.speed = [0.1, -0.1]
-
+        self.speed = 3
+        self.rect = self.image.get_rect()
         self.equipo = []
+
+    def dibujar(self,actor):
+        actor.blit(self.image,self.rect)
 
 # ---------------------------------------------------------------------
 
@@ -42,58 +33,78 @@ def load_image(filename, transparent=False):
         color = image.get_at((0,0))
         image.set_colorkey(color, RLEACCEL)
     return image
+
 # ---------------------------------------------------------------------
 
 def main():
-    SPEED = 39
-    POSX = 0
-    POSY = 0
 
+    pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Proyecto IA - 3Deaths")
+    #fondo = pygame.image.load('imagenes/piso2.jpg')
     background_image = load_image('imagenes/piso2.jpg')
     agentes = Agentes()
 
     while True:
-
+        key = pygame.key.get_pressed()
+        screen.blit(background_image,(0,0))
         for eventos in pygame.event.get():
             if eventos.type == QUIT:
-                return 0
+                pygame.quit()
 
-            elif eventos.type == pygame.KEYDOWN:
-                print(eventos.key)
-                if eventos.key == K_LEFT:
-                    if POSX == 0:
+        if key[K_LEFT]:
+            if agentes.rect.left == 0:
+                pass
+            else:
+                agentes.rect.left -= agentes.speed
+                if key[K_UP]:
+                    if agentes.rect.top == 0:
                         pass
                     else:
-                        POSX -= SPEED
-                elif eventos.key == K_RIGHT:
-                    if POSX == 1209:
+                        agentes.rect.top -= agentes.speed
+
+                elif key[K_DOWN]:
+                    if agentes.rect.top == 429:
                         pass
                     else:
-                        POSX += SPEED
-                elif eventos.key == K_UP:
-                    if POSY == 0:
+                        agentes.rect.top += agentes.speed
+
+        elif key[K_RIGHT]:
+            if agentes.rect.left == 1209:
+                pass
+            else:
+                agentes.rect.left += agentes.speed
+                if key[K_UP]:
+                    if agentes.rect.top == 0:
                         pass
                     else:
-                        POSY -= SPEED
-                elif eventos.key == K_DOWN:
-                    if POSY == 429:
+                        agentes.rect.top -= agentes.speed
+
+                elif key[K_DOWN]:
+                    if agentes.rect.top == 429:
                         pass
                     else:
-                        POSY += SPEED
+                        agentes.rect.top += agentes.speed
 
+        elif key[K_UP]:
+            if agentes.rect.top == 0:
+                pass
+            else:
+                agentes.rect.top -= agentes.speed
 
-        screen.fill(pygame.Color(255,255,9)) #color de fondo
-        screen.blit(background_image, (0, 0)) #imagen de background
-        screen.blit(agentes.image, (POSX,POSY))
+        elif key[K_DOWN]:
+            if agentes.rect.top == 429:
+                pass
+            else:
+                agentes.rect.top += agentes.speed
 
+        agentes.dibujar(screen)
+        pygame.display.update()
 
         pygame.display.flip()
     return 0
 
 if __name__ == '__main__':
-    #pygame.init()
 
 
     main()
