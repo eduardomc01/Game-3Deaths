@@ -1,4 +1,5 @@
 import pygame
+import sys
 from pygame.locals import *
 
 WIDTH = 1300
@@ -11,15 +12,15 @@ class Agentes(pygame.sprite.Sprite):
 
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = load_image("imagenes/persona.png", True)
-        #self.image = pygame.image.load("imagenes/persona.png")
-        self.image = pygame.transform.scale(self.image,(80,80))
+        #self.image = load_image("imagenes/ball.png", True)
+        self.image = pygame.image.load("imagenes/persona.png")
+        self.image = pygame.transform.scale(self.image,(60,60))
         self.speed = 3
         self.rect = self.image.get_rect()
         self.equipo = []
 
-    def dibujar(self,actor):
-        actor.blit(self.image,self.rect)
+    def dibujar(self, actor):
+        actor.blit(self.image, self.rect)
 
 # ---------------------------------------------------------------------
 
@@ -36,21 +37,25 @@ def load_image(filename, transparent=False):
 
 # ---------------------------------------------------------------------
 
-def main():
+def ParedEnJuego(screen, agentes):
 
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Proyecto IA - 3Deaths")
-    #fondo = pygame.image.load('imagenes/piso2.jpg')
-    background_image = load_image('imagenes/piso2.jpg')
-    agentes = Agentes()
+    nivel1 = pygame.image.load('imagenes/barda1.png')
+    nivel1 = pygame.transform.scale(nivel1,(700,70))
+    screen.blit(nivel1,(0,100))
 
-    while True:
+    reto = pygame.Rect(120,120,50,50)
+    pygame.draw.rect(screen,(100,70,70),reto)
+
+    if (reto.colliderect(agentes)):
+        print("\n Colisiono!")
+    else:
+        print("Libre")
+
+
+
+
+def MovimientoTeclas(agentes):
         key = pygame.key.get_pressed()
-        screen.blit(background_image,(0,0))
-        for eventos in pygame.event.get():
-            if eventos.type == QUIT:
-                pygame.quit()
 
         if key[K_LEFT]:
             if agentes.rect.left == 0:
@@ -98,13 +103,39 @@ def main():
             else:
                 agentes.rect.top += agentes.speed
 
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    #screen.fill((255,255,255))
+    pygame.display.set_caption("Proyecto IA - 3Deaths")
+
+    background = load_image('imagenes/fondo.png')
+
+
+
+    agentes = Agentes()
+
+    while True:
+
+        screen.blit(background,(0,0))
+
+
+        for eventos in pygame.event.get():
+            if eventos.type == QUIT:
+                pygame.quit()
+                sys.exit()
+                return 0
+
+        MovimientoTeclas(agentes)
+        ParedEnJuego(screen, agentes)
+
         agentes.dibujar(screen)
         pygame.display.update()
-
         pygame.display.flip()
-    return 0
+
+    #return 0
 
 if __name__ == '__main__':
-
 
     main()
