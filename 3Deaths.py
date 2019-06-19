@@ -9,7 +9,7 @@ from pygame.locals import *
 #--------------------------------------------------------------------------
 WIDTH = 1300
 HEIGHT = 650
-
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 # ---------------------------------------------------------------------
 
 # Clases
@@ -17,9 +17,8 @@ HEIGHT = 650
 class Agentes(pygame.sprite.Sprite):
 
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        #self.image = load_image("imagenes/ball.png", True)
-        self.image = pygame.image.load("imagenes/persona.png")
+        #pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("imagenes/persona2.gif")
         self.image = pygame.transform.scale(self.image,(60,60))
         self.speed = 4
         self.rect = self.image.get_rect()
@@ -36,9 +35,11 @@ def load_image(filename, transparent=False):
     image = pygame.image.load(filename)
     image = image.convert()
 
-    if transparent:
-        color = image.get_at((0,0))
-        image.set_colorkey(color, RLEACCEL)
+
+    #if transparent:
+        #a=0
+        #color = image.get_at((120,200))
+        #image.set_colorkey(color, RLEACCEL)
     return image
 
 
@@ -171,28 +172,48 @@ def MovimientoTeclas(agentes):
                 agentes.rect.top += agentes.speed
 
 
+def AgregarAgentes(screen, agentes, evento):
+
+    if evento.type == pygame.MOUSEBUTTONDOWN:
+        if evento.button == 1:
+            print("boton izquierdo")
+
+
+        elif evento.button == 2:
+            print("boton enmedio")
+
+
+        elif evento.button == 3:
+            print("boton derecho")
+
+
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
     #screen.fill((255,255,255))
     pygame.display.set_caption("Proyecto IA - 3Deaths")
-
     background = load_image('imagenes/fondo.png')
 
     agentes = Agentes()
 
     while True:
-
         screen.blit(background,(0,0))
+        #screen.blit(agentes.image,(120,120))
 
-
-        for eventos in pygame.event.get():
-            if eventos.type == QUIT:
+        for evento in pygame.event.get():
+            if evento.type == QUIT:
                 pygame.quit()
                 sys.exit()
                 return 0
 
+            AgregarAgentes(screen, agentes, evento)
+
+
+
+
+
         MovimientoTeclas(agentes)
+
         nivelEnJuego1(screen, agentes)
         nivelEnJuego2(screen, agentes)
         nivelEnJuego3(screen, agentes)
