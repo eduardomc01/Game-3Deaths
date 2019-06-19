@@ -1,10 +1,16 @@
+# Modulos
+# ----------------------------------------------------------------------------
 import pygame
 import sys
 from pygame.locals import *
+#----------------------------------------------------------------------------
 
+# Global
+#--------------------------------------------------------------------------
 WIDTH = 1300
 HEIGHT = 650
 
+# ---------------------------------------------------------------------
 
 # Clases
 # ---------------------------------------------------------------------
@@ -35,24 +41,19 @@ def load_image(filename, transparent=False):
         image.set_colorkey(color, RLEACCEL)
     return image
 
-# ---------------------------------------------------------------------
 
 def nivelEnJuego1(screen, agentes):
 
     nivel1 = pygame.image.load('imagenes/barda1.png')
     #nivel1 = pygame.transform.scale(nivel1,(700,70))
     screen.blit(nivel1,(0,50))
+    transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
     bloque1 = pygame.Rect(260,60,100,50)
-    pygame.draw.rect(screen,(200,0,0),bloque1)
-
-
     bloque2 = pygame.Rect(630,60,100,50)
-    pygame.draw.rect(screen,(0,200,0),bloque2)
-
-
     bloque3 = pygame.Rect(1040,60,100,50)
-    pygame.draw.rect(screen,(0,0,200),bloque3)
+
+    pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
 
     if(bloque1.colliderect(agentes)):
         print("\n bloque 1 nivel 1")
@@ -63,31 +64,19 @@ def nivelEnJuego1(screen, agentes):
     elif(bloque3.colliderect(agentes)):
         print("\n bloque 3 nivel 1")
 
-#    else:
-#        print("Libre")
-
 
 def nivelEnJuego2(screen, agentes):
 
     nivel2 = pygame.image.load('imagenes/barda2.png')
-    #nivel1 = pygame.transform.scale(nivel1,(700,70))
     screen.blit(nivel2,(0,180))
+    transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
     bloque1 = pygame.Rect(90,190,100,50)
-    pygame.draw.rect(screen,(200,0,0),bloque1)
-
-
     bloque2 = pygame.Rect(420,190,100,50)
-    pygame.draw.rect(screen,(0,200,0),bloque2)
-
-
     bloque3 = pygame.Rect(810,190,100,50)
-    pygame.draw.rect(screen,(0,0,200),bloque3)
-
-
     bloque4 = pygame.Rect(1100,190,100,50)
-    pygame.draw.rect(screen,(200,0,200),bloque4)
 
+    pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
 
     if(bloque1.colliderect(agentes)):
         print("\n bloque 1 nivel 2")
@@ -102,35 +91,19 @@ def nivelEnJuego2(screen, agentes):
         print("\n bloque 4 nivel 2")
 
 
-#    else:
-#        print("Libre")
-
-
 def nivelEnJuego3(screen, agentes):
 
     nivel3 = pygame.image.load('imagenes/barda3.png')
-    #nivel1 = pygame.transform.scale(nivel1,(700,70))
     screen.blit(nivel3,(0,310))
+    transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
     bloque1 = pygame.Rect(5,320,75,50)
-    pygame.draw.rect(screen,(200,0,0),bloque1)
-
-
     bloque2 = pygame.Rect(265,320,75,50)
-    pygame.draw.rect(screen,(0,200,0),bloque2)
-
-
     bloque3 = pygame.Rect(600,320,90,50)
-    pygame.draw.rect(screen,(0,0,200),bloque3)
-
-
     bloque4 = pygame.Rect(970,320,80,50)
-    pygame.draw.rect(screen,(200,0,200),bloque4)
-
-
     bloque5 = pygame.Rect(1230,320,100,50)
-    pygame.draw.rect(screen,(200,200,200),bloque5)
 
+    pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
 
     if(bloque1.colliderect(agentes)):
         print("\n bloque 1 nivel 3")
@@ -206,8 +179,6 @@ def main():
 
     background = load_image('imagenes/fondo.png')
 
-
-
     agentes = Agentes()
 
     while True:
@@ -232,6 +203,11 @@ def main():
 
     #return 0
 
+# ---------------------------------------------------------------------
+
+
+# Main
+#----------------------------------------------------------------------
 if __name__ == '__main__':
 
     main()
