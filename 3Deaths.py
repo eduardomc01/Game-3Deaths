@@ -121,6 +121,39 @@ def nivelEnJuego3(screen, agentes):
     elif(bloque5.colliderect(agentes)):
         print("\n bloque 5 nivel 3")
 
+def barras1(screen,agentes):
+    
+    color1 = (255,0,0,0) 
+    color2 = (40, 210, 250)
+    rect1 = (10,530, 400, 10)
+    rect2 = (10,540,400,10)
+    width = 0
+
+    pygame.draw.rect(screen, color1, rect1, width)
+    pygame.draw.rect(screen, color2, rect2, width)
+
+def barras2(screen,agentes):
+    
+    color1 = (255,0,0,0)
+    rect1 = (10,570,400, 10)
+    color2 = (40, 210, 250)
+    rect2 = (10,580,400, 10)
+    width = 0
+
+    pygame.draw.rect(screen, color1, rect1, width)
+    pygame.draw.rect(screen, color2, rect2, width)
+
+def barras3(screen,agentes):
+    
+    color1 = (255,0,0,0)
+    rect1 = (10,610, 400, 10)
+    color2 = (40, 210, 250)
+    rect2 = (10,620, 400, 10)
+    width = 0
+
+    pygame.draw.rect(screen, color1, rect1, width)
+    pygame.draw.rect(screen, color2, rect2, width)
+
 def MovimientoTeclas(agentes):
         key = pygame.key.get_pressed()
 
@@ -218,6 +251,9 @@ def main():
         nivelEnJuego3(screen, agentes)
 
         agentes.dibujar(screen)
+        barras1(screen,agentes)
+        barras2(screen,agentes)
+        barras3(screen,agentes)
         pygame.display.update()
         pygame.display.flip()
 
