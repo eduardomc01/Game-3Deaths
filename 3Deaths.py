@@ -41,7 +41,7 @@ def load_image(filename, transparent=False):
         #color = image.get_at((120,200))
         #image.set_colorkey(color, RLEACCEL)
     return image
-
+# ------------------------------------t---------------------------------
 
 def nivelEnJuego1(screen, agentes):
 
@@ -121,7 +121,6 @@ def nivelEnJuego3(screen, agentes):
     elif(bloque5.colliderect(agentes)):
         print("\n bloque 5 nivel 3")
 
-
 def MovimientoTeclas(agentes):
         key = pygame.key.get_pressed()
 
@@ -143,7 +142,7 @@ def MovimientoTeclas(agentes):
                         agentes.rect.top += agentes.speed
 
         elif key[K_RIGHT]:
-            if agentes.rect.left == 1209:
+            if agentes.rect.left == 1240:
                 pass
             else:
                 agentes.rect.left += agentes.speed
@@ -166,7 +165,7 @@ def MovimientoTeclas(agentes):
                 agentes.rect.top -= agentes.speed
 
         elif key[K_DOWN]:
-            if agentes.rect.top == 429:
+            if agentes.rect.top == 432:
                 pass
             else:
                 agentes.rect.top += agentes.speed
