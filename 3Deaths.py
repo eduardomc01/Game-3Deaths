@@ -124,8 +124,8 @@ def nivelEnJuego3(screen, agentes):
 def barras1(screen,agentes):
     
     color1 = (255,0,0,0) 
-    color2 = (40, 210, 250)
-    rect1 = (10,530, 400, 10)
+    color2 = (40,210,250)
+    rect1 = (10,530,400,10)
     rect2 = (10,540,400,10)
     width = 0
 
@@ -135,9 +135,9 @@ def barras1(screen,agentes):
 def barras2(screen,agentes):
     
     color1 = (255,0,0,0)
-    rect1 = (10,570,400, 10)
-    color2 = (40, 210, 250)
-    rect2 = (10,580,400, 10)
+    rect1 = (10,570,400,10)
+    color2 = (40,210,250)
+    rect2 = (10,580,400,10)
     width = 0
 
     pygame.draw.rect(screen, color1, rect1, width)
@@ -146,9 +146,9 @@ def barras2(screen,agentes):
 def barras3(screen,agentes):
     
     color1 = (255,0,0,0)
-    rect1 = (10,610, 400, 10)
-    color2 = (40, 210, 250)
-    rect2 = (10,620, 400, 10)
+    rect1 = (10,610,400,10)
+    color2 = (40,210,250,0)
+    rect2 = (10,620,400,10)
     width = 0
 
     pygame.draw.rect(screen, color1, rect1, width)
@@ -186,7 +186,7 @@ def MovimientoTeclas(agentes):
                         agentes.rect.top -= agentes.speed
 
                 elif key[K_DOWN]:
-                    if agentes.rect.top == 429:
+                    if agentes.rect.top == 432:
                         pass
                     else:
                         agentes.rect.top += agentes.speed
