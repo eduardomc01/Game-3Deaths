@@ -51,15 +51,13 @@ class Agentes(pygame.sprite.Sprite):
 
     def RestartVida(self, screen, agentes, Rvida):
         agentes.vida -= Rvida
-
         if(agentes.vida == 0):
             miFuente = pygame.font.SysFont("Arial", 50)
             miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
             screen.blit(miTexto,(850, 530))
-
-
-        for n in agentes.equipo:
-            self.RestartVida(screen, n, Rvida)
+        else:
+            for n in agentes.equipo:
+                self.RestartVida(screen, n, Rvida)
 
 
     def load_image(self, filename, transparent=False):
@@ -82,7 +80,6 @@ class Agentes(pygame.sprite.Sprite):
 
         if(bloque1.colliderect(agentes)):
             self.RestartVida(screen, agentes, 1)
-
             print("\n bloque 1 nivel 1")
 
         elif(bloque2.colliderect(agentes)):
@@ -185,72 +182,77 @@ class Agentes(pygame.sprite.Sprite):
 
         key = pygame.key.get_pressed()
 
-        if key[K_LEFT]:
+        if (key[K_LEFT] or key[K_a]):
             if agentes.rect.left == 0:
                 pass
             else:
                 sonidoCaminando.play()
                 agentes.rect.left -= agentes.speed
-                if key[K_UP]:
+                if (key[K_UP] or key[K_w]):
                     if agentes.rect.top == 0:
                         pass
                     else:
                         sonidoCaminando.play()
                         agentes.rect.top -= agentes.speed
 
-                elif key[K_DOWN]:
+                elif (key[K_DOWN] or key[K_s]):
                     if agentes.rect.top == 429:
                         pass
                     else:
                         sonidoCaminando.play()
                         agentes.rect.top += agentes.speed
 
-        elif key[K_RIGHT]:
+        elif (key[K_d] or key[K_RIGHT]):
             if agentes.rect.left == 1240:
                 pass
             else:
                 sonidoCaminando.play()
                 agentes.rect.left += agentes.speed
-                if key[K_UP]:
+                if (key[K_w] or key[K_UP]):
                     if agentes.rect.top == 0:
                         pass
                     else:
                         sonidoCaminando.play()
                         agentes.rect.top -= agentes.speed
 
-                elif key[K_DOWN]:
+                elif (key[K_s] or key[K_DOWN]):
                     if agentes.rect.top == 429:
                         pass
                     else:
                         sonidoCaminando.play()
                         agentes.rect.top += agentes.speed
 
-        elif key[K_UP]:
+        elif (key[K_w] or key[K_UP]):
             if agentes.rect.top == 0:
                 pass
             else:
                 sonidoCaminando.play()
                 agentes.rect.top -= agentes.speed
 
-        elif key[K_DOWN]:
+        elif (key[K_s] or key[K_DOWN]):
             if agentes.rect.top == 432:
                 pass
             else:
                 sonidoCaminando.play()
                 agentes.rect.top += agentes.speed
 
+        elif key[K_ESCAPE]:
+            pygame.quit()
+            sys.exit()
+            return 0
 
 
-    def MouseClick(self, screen, agentes, evento):
+    def MouseClick(self, screen, agentes, evento, sonidoSusurrando):
 
         if evento.type == pygame.MOUSEBUTTONDOWN:
-            if evento.button == 1:
+            if (evento.button == 1):
+                sonidoSusurrando.play()
                 print("boton izquierdo")
 
-            elif evento.button == 2:
+            elif (evento.button == 2):
                 print("boton enmedio")
 
-            elif evento.button == 3:
+            elif (evento.button == 3):
                 print("boton derecho")
 
 
@@ -264,6 +266,7 @@ def main():
     background = agentes.load_image('imagenes/fondo.png')
     bandaDatos = agentes.load_image('imagenes/datos.png')
     sonidoCaminando = pygame.mixer.Sound("sonidos/trotar.wav")
+    sonidoSusurrando = pygame.mixer.Sound("sonidos/susurro.wav")
 
     agentes.AgregarPersonajes(agentes, agentes.equipo, screen)
 
@@ -283,7 +286,11 @@ def main():
             if(evento.type == pygame.KEYUP):
                 sonidoCaminando.stop()
 
-            agentes.MouseClick(screen, agentes, evento)
+            elif(evento.type == pygame.MOUSEBUTTONUP):
+                sonidoSusurrando.stop()
+
+
+            agentes.MouseClick(screen, agentes, evento, sonidoSusurrando)
 
         agentes.ActualizarAtributos(screen, agentes)
 
