@@ -1,16 +1,19 @@
 # Modulos
 # ----------------------------------------------------------------------------
 import pygame
-import sys
 from pygame.locals import *
+import sys
 import random
+
 #----------------------------------------------------------------------------
+
 
 # Global
 #--------------------------------------------------------------------------
-WIDTH = 800    #1300
+WIDTH = 1300   #1300
 HEIGHT = 650
 # ---------------------------------------------------------------------
+
 
 # Clases
 # ---------------------------------------------------------------------
@@ -20,7 +23,7 @@ class Agentes(pygame.sprite.Sprite):
         #pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("imagenes/grupo.png")
         self.image = pygame.transform.scale(self.image,(100,50))
-        self.speed = 4
+        self.speed = 5
 
         self.rect = self.image.get_rect()
 
@@ -34,22 +37,23 @@ class Agentes(pygame.sprite.Sprite):
 
     def AgregarPersonajes(self, agentes, equipo, screen):
         for i in range(3):
-            #print("personaje ",i," ---->", i+10)
-            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10), 800))
+            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10), 500))
 
 
-    def ActualizarAtributos(self, screen, agentes, nivel):
-        #print(nivel, agentes.i, agentes.n, agentes.c, agentes.vida)
-        agentes.barras1(screen, agentes.vida)
+    def ActualizarAtributos(self, screen, agentes):
+        print(agentes.i, agentes.n, agentes.c, agentes.vida)
+        self.barras1(screen, agentes.vida)
 
         for n in agentes.equipo:
-            self.ActualizarAtributos(screen, n, nivel + "-")
+            self.ActualizarAtributos(screen, n)
 
 
     def RestartVida(self, screen, agentes, Rvida):
-        #print(".....>",nivel,agentes.vida)
         agentes.vida -= Rvida
-        #print(agentes.vida)
+        if(agentes.vida == 0):
+            miFuente = pygame.font.SysFont("Arial", 50)
+            miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
+            screen.blit(miTexto,(850, 530))
 
         for n in agentes.equipo:
             self.RestartVida(screen, n, Rvida)
@@ -65,7 +69,6 @@ class Agentes(pygame.sprite.Sprite):
     def nivelEnJuego1(self, screen, agentes):
 
         nivel1 = pygame.image.load('imagenes/barda1.png')
-        #nivel1 = pygame.transform.scale(nivel1,(700,70))
         screen.blit(nivel1,(0,50))
         transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
@@ -77,6 +80,7 @@ class Agentes(pygame.sprite.Sprite):
 
         if(bloque1.colliderect(agentes)):
             self.RestartVida(screen, agentes, 1)
+
             print("\n bloque 1 nivel 1")
 
         elif(bloque2.colliderect(agentes)):
@@ -110,6 +114,7 @@ class Agentes(pygame.sprite.Sprite):
         elif(bloque4.colliderect(agentes)):
             print("\n bloque 4 nivel 2")
 
+
     def nivelEnJuego3(self, screen, agentes):
 
         nivel3 = pygame.image.load('imagenes/barda3.png')
@@ -139,15 +144,16 @@ class Agentes(pygame.sprite.Sprite):
         elif(bloque5.colliderect(agentes)):
             print("\n bloque 5 nivel 3")
 
+
     def barras1(self, screen, vida):
 
-        color1 = (255,0,0,0)
-        rect1 = (0 ,560, vida , 20) #el tercer parametro es la vida 100 = 100%
-        pygame.draw.rect(screen, color1, rect1, 1)
+        color1 = (255, 0, 0, 0)
+        rect1 = (1, 550, vida, 50) #el tercer parametro es la vida 100 = 100%
+        pygame.draw.rect(screen, color1, rect1, 0)
 
         #color2 = (40, 210, 250)
-        #rect2 = (10,540, e1,10)
-        #pygame.draw.rect(screen, color2, rect2, 1)
+        #rect2 = (1, 560, vida, 10)
+        #pygame.draw.rect(screen, color2, rect2, 20)
 
     '''
     def barras2(screen,agentes):
@@ -230,7 +236,6 @@ class Agentes(pygame.sprite.Sprite):
                 print("boton izquierdo")
 
             elif evento.button == 2:
-                #agentes.AgregarPersonajes(agentes, screen)
                 print("boton enmedio")
 
             elif evento.button == 3:
@@ -245,14 +250,15 @@ def main():
 
     pygame.display.set_caption("Proyecto IA - 3Deaths")
     background = agentes.load_image('imagenes/fondo.png')
+    bandaDatos = agentes.load_image('imagenes/datos.png')
 
     agentes.AgregarPersonajes(agentes, agentes.equipo, screen)
 
     while True:
 
-
-
+        screen.blit(bandaDatos,(0,400))
         screen.blit(background,(0,0))
+
         screen.blit(agentes.image, agentes.rect)
 
         for evento in pygame.event.get():
@@ -263,14 +269,13 @@ def main():
 
             agentes.MouseClick(screen, agentes, evento)
 
-        agentes.ActualizarAtributos(screen, agentes, "-")
+        agentes.ActualizarAtributos(screen, agentes)
 
         agentes.MovimientoTeclas(agentes)
 
         agentes.nivelEnJuego1(screen, agentes)
         agentes.nivelEnJuego2(screen, agentes)
         agentes.nivelEnJuego3(screen, agentes)
-
 
         pygame.display.update()
         pygame.display.flip()
