@@ -12,6 +12,7 @@ import random
 #--------------------------------------------------------------------------
 WIDTH = 1300   #1300
 HEIGHT = 650
+
 # ---------------------------------------------------------------------
 
 
@@ -41,7 +42,7 @@ class Agentes(pygame.sprite.Sprite):
 
 
     def ActualizarAtributos(self, screen, agentes):
-        print(agentes.i, agentes.n, agentes.c, agentes.vida)
+        #print(agentes.i, agentes.n, agentes.c, agentes.vida)
         self.barras1(screen, agentes.vida)
 
         for n in agentes.equipo:
@@ -50,10 +51,12 @@ class Agentes(pygame.sprite.Sprite):
 
     def RestartVida(self, screen, agentes, Rvida):
         agentes.vida -= Rvida
+
         if(agentes.vida == 0):
             miFuente = pygame.font.SysFont("Arial", 50)
             miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
             screen.blit(miTexto,(850, 530))
+
 
         for n in agentes.equipo:
             self.RestartVida(screen, n, Rvida)
@@ -62,7 +65,6 @@ class Agentes(pygame.sprite.Sprite):
     def load_image(self, filename, transparent=False):
         image = pygame.image.load(filename)
         image = image.convert()
-
         return image
 
 
@@ -179,54 +181,64 @@ class Agentes(pygame.sprite.Sprite):
         pygame.draw.rect(screen, color2, rect2, width)
     '''
 
-    def MovimientoTeclas(self, agentes):
-            key = pygame.key.get_pressed()
+    def MovimientoTeclas(self, agentes, sonidoCaminando):
 
-            if key[K_LEFT]:
-                if agentes.rect.left == 0:
-                    pass
-                else:
-                    agentes.rect.left -= agentes.speed
-                    if key[K_UP]:
-                        if agentes.rect.top == 0:
-                            pass
-                        else:
-                            agentes.rect.top -= agentes.speed
+        key = pygame.key.get_pressed()
 
-                    elif key[K_DOWN]:
-                        if agentes.rect.top == 429:
-                            pass
-                        else:
-                            agentes.rect.top += agentes.speed
+        if key[K_LEFT]:
+            if agentes.rect.left == 0:
+                pass
+            else:
+                sonidoCaminando.play()
+                agentes.rect.left -= agentes.speed
+                if key[K_UP]:
+                    if agentes.rect.top == 0:
+                        pass
+                    else:
+                        sonidoCaminando.play()
+                        agentes.rect.top -= agentes.speed
 
-            elif key[K_RIGHT]:
-                if agentes.rect.left == 1240:
-                    pass
-                else:
-                    agentes.rect.left += agentes.speed
-                    if key[K_UP]:
-                        if agentes.rect.top == 0:
-                            pass
-                        else:
-                            agentes.rect.top -= agentes.speed
+                elif key[K_DOWN]:
+                    if agentes.rect.top == 429:
+                        pass
+                    else:
+                        sonidoCaminando.play()
+                        agentes.rect.top += agentes.speed
 
-                    elif key[K_DOWN]:
-                        if agentes.rect.top == 429:
-                            pass
-                        else:
-                            agentes.rect.top += agentes.speed
+        elif key[K_RIGHT]:
+            if agentes.rect.left == 1240:
+                pass
+            else:
+                sonidoCaminando.play()
+                agentes.rect.left += agentes.speed
+                if key[K_UP]:
+                    if agentes.rect.top == 0:
+                        pass
+                    else:
+                        sonidoCaminando.play()
+                        agentes.rect.top -= agentes.speed
 
-            elif key[K_UP]:
-                if agentes.rect.top == 0:
-                    pass
-                else:
-                    agentes.rect.top -= agentes.speed
+                elif key[K_DOWN]:
+                    if agentes.rect.top == 429:
+                        pass
+                    else:
+                        sonidoCaminando.play()
+                        agentes.rect.top += agentes.speed
 
-            elif key[K_DOWN]:
-                if agentes.rect.top == 432:
-                    pass
-                else:
-                    agentes.rect.top += agentes.speed
+        elif key[K_UP]:
+            if agentes.rect.top == 0:
+                pass
+            else:
+                sonidoCaminando.play()
+                agentes.rect.top -= agentes.speed
+
+        elif key[K_DOWN]:
+            if agentes.rect.top == 432:
+                pass
+            else:
+                sonidoCaminando.play()
+                agentes.rect.top += agentes.speed
+
 
 
     def MouseClick(self, screen, agentes, evento):
@@ -251,6 +263,7 @@ def main():
     pygame.display.set_caption("Proyecto IA - 3Deaths")
     background = agentes.load_image('imagenes/fondo.png')
     bandaDatos = agentes.load_image('imagenes/datos.png')
+    sonidoCaminando = pygame.mixer.Sound("sonidos/trotar.wav")
 
     agentes.AgregarPersonajes(agentes, agentes.equipo, screen)
 
@@ -267,11 +280,14 @@ def main():
                 sys.exit()
                 return 0
 
+            if(evento.type == pygame.KEYUP):
+                sonidoCaminando.stop()
+
             agentes.MouseClick(screen, agentes, evento)
 
         agentes.ActualizarAtributos(screen, agentes)
 
-        agentes.MovimientoTeclas(agentes)
+        agentes.MovimientoTeclas(agentes, sonidoCaminando)
 
         agentes.nivelEnJuego1(screen, agentes)
         agentes.nivelEnJuego2(screen, agentes)
