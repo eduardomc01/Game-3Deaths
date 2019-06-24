@@ -22,7 +22,7 @@ class Agentes(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("imagenes/grupo.png")
         self.image = pygame.transform.scale(self.image,(100,50))
-        self.speed = 3
+        self.speed = 10
 
         self.rect = self.image.get_rect()
 
@@ -48,7 +48,7 @@ class Agentes(pygame.sprite.Sprite):
 
     def ActualizarAtributos(self, screen, agentes):
         if(agentes.i != 0):
-            print(agentes.i, agentes.n, agentes.c, agentes.vida, agentes.pensar)
+            #print(agentes.i, agentes.n, agentes.c, agentes.vida, agentes.pensar)
             self.barras1(screen, agentes.vida, agentes.pensar)
         else:
             for n in agentes.equipo:
@@ -90,7 +90,12 @@ class Agentes(pygame.sprite.Sprite):
 
         if(bloque1.colliderect(agentes)):
             self.RestartVida(screen, agentes, 1)
-            print("\n bloque 1 nivel 1")
+            retos.AgregarRetos(9,9)
+
+            print("------------------")
+            retos.ImprimirRetos(retos,"-")
+            print("------------------")
+            #print("\n bloque 1 nivel 1")
 
         elif(bloque2.colliderect(agentes)):
             print("\n bloque 2 nivel 1")
@@ -242,6 +247,7 @@ class Agentes(pygame.sprite.Sprite):
                 agentes.rect.top += agentes.speed
 
         elif key[K_ESCAPE]:
+            pygame.mixer.music.stop()
             pygame.quit()
             sys.exit()
             return 0
@@ -251,6 +257,20 @@ class Agentes(pygame.sprite.Sprite):
         if(pygame.mouse.get_pressed()[0]):
             self.RestarPensar(screen, agentes, 1)
             sonidoSusurrando.play()
+
+        elif(pygame.mouse.get_pressed()[2]):
+            #pygame.init()
+            pygame.display.set_mode((200, 200))
+            pygame.display.set_caption("Instrucciones del JUEGO")
+
+            while True:
+                for evento in pygame.event.get():
+                    if evento.type == QUIT:
+                        pygame.quit()
+                        sys.exit()
+                        return 0
+
+
 '''
             if (evento.button == 1):
                 self.RestarPensar(screen, agentes, 50)
@@ -268,21 +288,26 @@ def main():
     pygame.init()
     agentes = Agentes(0,0,0,0,0)
 
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT)) #,RESIZABLE vuelve la pantalla manipulable
 
     pygame.display.set_caption("Proyecto IA - 3Deaths")
+
+
+
     background = agentes.load_image('imagenes/fondo.png')
     bandaDatos = agentes.load_image('imagenes/datos.png')
-    sonidoFondo = pygame.mixer.Sound("sonidos/solve_puzzle.wav")
+
     sonidoCaminando = pygame.mixer.Sound("sonidos/trotar.wav")
     sonidoSusurrando = pygame.mixer.Sound("sonidos/susurro.wav")
     sonidoMuerte = pygame.mixer.Sound("sonidos/morir.wav")
 
-    sonidoFondo.play()
+    pygame.mixer.music.load("sonidos/solve_puzzle.wav")
+    pygame.mixer.music.play(100)
+
     agentes.AgregarPersonajes(agentes, agentes.equipo, screen)
 
     while True:
-
+        pygame.mixer.music.rewind()
         screen.blit(bandaDatos,(0,400))
         screen.blit(background,(0,0))
         screen.blit(agentes.image, agentes.rect)
@@ -293,13 +318,12 @@ def main():
                 sys.exit()
                 return 0
 
-
-
             if(evento.type == pygame.KEYUP):
                 sonidoCaminando.stop()
 
             elif(evento.type == pygame.MOUSEBUTTONUP):
                 sonidoSusurrando.stop()
+
 
         agentes.MouseClick(screen, agentes, sonidoSusurrando, retos)
 
