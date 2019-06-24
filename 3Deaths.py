@@ -5,9 +5,7 @@ from pygame.locals import *
 import sys
 import random
 from ProgramaRetos import *
-
 #----------------------------------------------------------------------------
-
 
 # Global
 #--------------------------------------------------------------------------
@@ -15,7 +13,6 @@ WIDTH = 1300   #1300
 HEIGHT = 650
 
 # ---------------------------------------------------------------------
-
 
 # Clases
 # ---------------------------------------------------------------------
@@ -276,10 +273,12 @@ def main():
     pygame.display.set_caption("Proyecto IA - 3Deaths")
     background = agentes.load_image('imagenes/fondo.png')
     bandaDatos = agentes.load_image('imagenes/datos.png')
+    sonidoFondo = pygame.mixer.Sound("sonidos/solve_puzzle.wav")
     sonidoCaminando = pygame.mixer.Sound("sonidos/trotar.wav")
     sonidoSusurrando = pygame.mixer.Sound("sonidos/susurro.wav")
     sonidoMuerte = pygame.mixer.Sound("sonidos/morir.wav")
 
+    sonidoFondo.play()
     agentes.AgregarPersonajes(agentes, agentes.equipo, screen)
 
     while True:
