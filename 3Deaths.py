@@ -82,8 +82,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         if(agentes.i != 0):
             if(agentes.pensar == 0):
                 miFuente = pygame.font.SysFont("Arial", 50)
-                #miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
-                #screen.blit(miTexto,(850, 530))
+
         else:
             for n in agentes.equipo:
                 self.RestarPensar(screen, n, Rpensar)
@@ -101,22 +100,32 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         if(bloque1.colliderect(agentes)):
 
             #for i in range(3):  #inteligencia, tiempo
-            self.AgregarRetos(10000, 15000, 0) #5000
-            self.AgregarRetos(8000, 9000, 0)   #1
-            self.AgregarRetos(3000, 14000, 0)  #11
+            self.AgregarTiempo(5000) #5 seg
+            self.AgregarTiempo(1000) #1 seg
+            self.AgregarTiempo(3000) #3 seg
 
-            #self.ImprimirRetos(retos, "-")
+            aux = [20,11,15,13,7,9,11,2,9]
 
-            input("STOP")
+            for i in retos.hijos:
+                for j in range(3):
+                    self.AgregarGvida(retos, aux.pop(), i.t)
+            #self.AgregarGvida(retos, 20)
+            #self.AgregarGvida(retos, 10)
+            #self.AgregarGvida(retos, 15)
+
+            self.ImprimirRetos(retos, "-")
+            input("S T O P")
+
             mejor = self.mejorEleccion(agentes)
 
-            pygame.time.delay(3000)
+            #pygame.time.delay(3000)
             self.RestartVida(screen, agentes, 100)
-
 
             #print("------------------")
             #retos.ImprimirRetos(retos,"-")
             #print("------------------")
+
+            #input("STOP")
 
             agentes.rect.top += 60
 
