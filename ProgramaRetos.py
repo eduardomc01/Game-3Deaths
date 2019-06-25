@@ -1,4 +1,7 @@
 
+T_Inteligencia = []
+P_Pensar = []
+
 class ArbolRetos():
     def __init__(self, nivel, p, t, x, y):
         self.nivel = nivel
@@ -10,9 +13,11 @@ class ArbolRetos():
         self.hijos = []
 
     def AgregarRetos(self, p, t):
-        for i in range(4):
-            retos.hijos.append(ArbolRetos(i,p,t,0,0))
+        retos.hijos.append(ArbolRetos(10,p,t,0,0))
 
+    def ReiniciarRetos(self, retos):
+        for i in retos.hijos:
+            retos.hijos.pop()
 
     def ImprimirRetos(self, retos, ident):
         #if(retos.nivel != None):
@@ -26,5 +31,4 @@ retos = ArbolRetos(None,None,None,None,None)
 
 #retos.AgregarRetos(retos)
 #retos.ImprimirRetos(retos, "-")
-
-input("Detener!")
+#input("Detener!")

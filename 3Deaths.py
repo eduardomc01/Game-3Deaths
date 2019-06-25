@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 import sys
 import random
+import time
 from ProgramaRetos import *
 #----------------------------------------------------------------------------
 
@@ -11,6 +12,7 @@ from ProgramaRetos import *
 #--------------------------------------------------------------------------
 WIDTH = 1300   #1300
 HEIGHT = 650
+#P_Todos = []
 
 # ---------------------------------------------------------------------
 
@@ -22,7 +24,7 @@ class Agentes(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("imagenes/grupo.png")
         self.image = pygame.transform.scale(self.image,(100,50))
-        self.speed = 10
+        self.speed = 5
 
         self.rect = self.image.get_rect()
 
@@ -43,7 +45,7 @@ class Agentes(pygame.sprite.Sprite):
 
     def AgregarPersonajes(self, agentes, equipo, screen):
         for i in range(3):
-            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10), 500, 300))
+            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10), 100, 300))
 
 
     def ActualizarAtributos(self, screen, agentes):
@@ -57,10 +59,16 @@ class Agentes(pygame.sprite.Sprite):
 
     def RestartVida(self, screen, agentes, Rvida):
         agentes.vida -= Rvida
-        if(agentes.vida == 0):
-            miFuente = pygame.font.SysFont("Arial", 50)
-            miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
-            screen.blit(miTexto,(850, 530))
+        if(agentes.i != 0):
+            if(agentes.vida <= 0):
+                n = pygame.image.load('imagenes/gameOver.png')
+                screen.blit(n,(400,100))
+                pygame.time.delay(1000)
+
+                #pygame.time.delay(5000)
+                #miFuente = pygame.font.SysFont("Arial", 50)
+                #miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
+                #screen.blit(miTexto,(850, 530))
         else:
             for n in agentes.equipo:
                 self.RestartVida(screen, n, Rvida)
@@ -82,25 +90,68 @@ class Agentes(pygame.sprite.Sprite):
         screen.blit(nivel1,(0,50))
         transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
-        bloque1 = pygame.Rect(260,60,100,50)
-        bloque2 = pygame.Rect(630,60,100,50)
-        bloque3 = pygame.Rect(1040,60,100,50)
+        bloque1 = pygame.Rect(250,100,103,10) # el primero es de las -X+ el segundo parametro representa +Y-
+        bloque2 = pygame.Rect(630,100,103,10)
+        bloque3 = pygame.Rect(1040,100,103,10)
 
-        pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
+        #pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
 
         if(bloque1.colliderect(agentes)):
+            #pygame.time.delay(1000)
             self.RestartVida(screen, agentes, 1)
-            retos.AgregarRetos(9,9)
+
+            #for i in range(3):
+            #    retos.AgregarRetos(10, 3)
+
+            #print("------------------")
+            #retos.ImprimirRetos(retos,"-")
+            #print("------------------")
+
+            #print("GOKUUUUUUUUUUUUUU!",time)
+            #input("STOPP")
+
+            #agentes.rect.top += 60
+
+            #retos.ReiniciarRetos(retos)
+
+            #print("\n bloque 1 nivel 1")
+
+        elif(bloque2.colliderect(agentes)):
+            pygame.time.delay(10000)
+            self.RestartVida(screen, agentes, 1)
+
+            for i in range(3):
+                retos.AgregarRetos(20,10)
 
             print("------------------")
             retos.ImprimirRetos(retos,"-")
             print("------------------")
-            #print("\n bloque 1 nivel 1")
 
-        elif(bloque2.colliderect(agentes)):
+            #print("GOKUUUUUUUUUUUUUU!",time)
+            #input("STOPP")
+
+            agentes.rect.top += 60
+
+            retos.ReiniciarRetos(retos)
             print("\n bloque 2 nivel 1")
 
         elif(bloque3.colliderect(agentes)):
+            pygame.time.delay(20000)
+            self.RestartVida(screen, agentes, 1)
+
+            for i in range(3):
+                retos.AgregarRetos(5, 20)
+
+            print("------------------")
+            retos.ImprimirRetos(retos,"-")
+            print("------------------")
+
+            #print("GOKUUUUUUUUUUUUUU!",time)
+            #input("STOPP")
+
+            agentes.rect.top += 60
+
+            retos.ReiniciarRetos(retos)
             print("\n bloque 3 nivel 1")
 
     def nivelEnJuego2(self, screen, agentes):
@@ -116,7 +167,10 @@ class Agentes(pygame.sprite.Sprite):
         pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
 
         if(bloque1.colliderect(agentes)):
-            print("\n bloque 1 nivel 2")
+
+            pygame.time.delay(2000)
+            agentes.rect.top += 101
+            #print("\n bloque 1 nivel 2")
 
         elif(bloque2.colliderect(agentes)):
             print("\n bloque 2 nivel 2")
@@ -254,12 +308,14 @@ class Agentes(pygame.sprite.Sprite):
 
 
     def MouseClick(self, screen, agentes, sonidoSusurrando, retos):
+        
         if(pygame.mouse.get_pressed()[0]):
             self.RestarPensar(screen, agentes, 1)
             sonidoSusurrando.play()
 
+'''
         elif(pygame.mouse.get_pressed()[2]):
-            #pygame.init()
+
             pygame.display.set_mode((200, 200))
             pygame.display.set_caption("Instrucciones del JUEGO")
 
@@ -269,7 +325,7 @@ class Agentes(pygame.sprite.Sprite):
                         pygame.quit()
                         sys.exit()
                         return 0
-
+'''
 
 '''
             if (evento.button == 1):
@@ -291,8 +347,6 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT)) #,RESIZABLE vuelve la pantalla manipulable
 
     pygame.display.set_caption("Proyecto IA - 3Deaths")
-
-
 
     background = agentes.load_image('imagenes/fondo.png')
     bandaDatos = agentes.load_image('imagenes/datos.png')
@@ -333,9 +387,9 @@ def main():
 
         agentes.MovimientoTeclas(agentes, sonidoCaminando)
 
-        agentes.nivelEnJuego1(screen, agentes)
-        agentes.nivelEnJuego2(screen, agentes)
         agentes.nivelEnJuego3(screen, agentes)
+        agentes.nivelEnJuego2(screen, agentes)
+        agentes.nivelEnJuego1(screen, agentes)
 
         pygame.display.update()
         pygame.display.flip()
