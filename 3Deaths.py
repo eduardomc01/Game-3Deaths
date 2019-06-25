@@ -2,23 +2,28 @@
 # ----------------------------------------------------------------------------
 import pygame
 from pygame.locals import *
+
+import programaGrupo
+
+import programaRetos
+from programaRetos import *
+
 import sys
 import random
-import time
-from ProgramaRetos import *
+#import time
+
 #----------------------------------------------------------------------------
 
 # Global
 #--------------------------------------------------------------------------
 WIDTH = 1300   #1300
 HEIGHT = 650
-#P_Todos = []
-
+GAME_OVER = [False]
 # ---------------------------------------------------------------------
 
 # Clases
 # ---------------------------------------------------------------------
-class Agentes(pygame.sprite.Sprite):
+class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
     def __init__(self, i, n, c, vida, pensar):
         pygame.sprite.Sprite.__init__(self)
@@ -45,7 +50,7 @@ class Agentes(pygame.sprite.Sprite):
 
     def AgregarPersonajes(self, agentes, equipo, screen):
         for i in range(3):
-            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10), 100, 300))
+            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10),500, 300))
 
 
     def ActualizarAtributos(self, screen, agentes):
@@ -61,10 +66,8 @@ class Agentes(pygame.sprite.Sprite):
         agentes.vida -= Rvida
         if(agentes.i != 0):
             if(agentes.vida <= 0):
-                n = pygame.image.load('imagenes/gameOver.png')
-                screen.blit(n,(400,100))
-                pygame.time.delay(1000)
-
+                GAME_OVER.pop()
+                GAME_OVER.append(True)
                 #pygame.time.delay(5000)
                 #miFuente = pygame.font.SysFont("Arial", 50)
                 #miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
@@ -76,10 +79,11 @@ class Agentes(pygame.sprite.Sprite):
 
     def RestarPensar(self, screen, agentes, Rpensar):
         agentes.pensar -= Rpensar
-        if(agentes.pensar == 0):
-            miFuente = pygame.font.SysFont("Arial", 50)
-            #miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
-            #screen.blit(miTexto,(850, 530))
+        if(agentes.i != 0):
+            if(agentes.pensar == 0):
+                miFuente = pygame.font.SysFont("Arial", 50)
+                #miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
+                #screen.blit(miTexto,(850, 530))
         else:
             for n in agentes.equipo:
                 self.RestarPensar(screen, n, Rpensar)
@@ -90,31 +94,34 @@ class Agentes(pygame.sprite.Sprite):
         screen.blit(nivel1,(0,50))
         transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
-        bloque1 = pygame.Rect(250,100,103,10) # el primero es de las -X+ el segundo parametro representa +Y-
+        bloque1 = pygame.Rect(250,100,103,10)
         bloque2 = pygame.Rect(630,100,103,10)
         bloque3 = pygame.Rect(1040,100,103,10)
 
-        #pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
-
         if(bloque1.colliderect(agentes)):
-            #pygame.time.delay(1000)
-            self.RestartVida(screen, agentes, 1)
 
-            #for i in range(3):
-            #    retos.AgregarRetos(10, 3)
+            #for i in range(3):  #inteligencia, tiempo
+            self.AgregarRetos(10000, 15000, 0) #5000
+            self.AgregarRetos(8000, 9000, 0)   #1
+            self.AgregarRetos(3000, 14000, 0)  #11
+
+            #self.ImprimirRetos(retos, "-")
+
+            input("STOP")
+            mejor = self.mejorEleccion(agentes)
+
+            pygame.time.delay(3000)
+            self.RestartVida(screen, agentes, 100)
+
 
             #print("------------------")
             #retos.ImprimirRetos(retos,"-")
             #print("------------------")
 
-            #print("GOKUUUUUUUUUUUUUU!",time)
-            #input("STOPP")
+            agentes.rect.top += 60
 
-            #agentes.rect.top += 60
-
-            #retos.ReiniciarRetos(retos)
-
-            #print("\n bloque 1 nivel 1")
+            self.ReiniciarRetos(retos)
+            print("\n bloque 1 nivel 1")
 
         elif(bloque2.colliderect(agentes)):
             pygame.time.delay(10000)
@@ -123,12 +130,9 @@ class Agentes(pygame.sprite.Sprite):
             for i in range(3):
                 retos.AgregarRetos(20,10)
 
-            print("------------------")
-            retos.ImprimirRetos(retos,"-")
-            print("------------------")
-
-            #print("GOKUUUUUUUUUUUUUU!",time)
-            #input("STOPP")
+            #print("------------------")
+            #retos.ImprimirRetos(retos,"-")
+            #print("------------------")
 
             agentes.rect.top += 60
 
@@ -142,12 +146,9 @@ class Agentes(pygame.sprite.Sprite):
             for i in range(3):
                 retos.AgregarRetos(5, 20)
 
-            print("------------------")
-            retos.ImprimirRetos(retos,"-")
-            print("------------------")
-
-            #print("GOKUUUUUUUUUUUUUU!",time)
-            #input("STOPP")
+            #print("------------------")
+            #retos.ImprimirRetos(retos,"-")
+            #print("------------------")
 
             agentes.rect.top += 60
 
@@ -307,11 +308,18 @@ class Agentes(pygame.sprite.Sprite):
             return 0
 
 
-    def MouseClick(self, screen, agentes, sonidoSusurrando, retos):
-        
+    def MouseClick(self, screen, agentes, sonidoSusurrando):
+
         if(pygame.mouse.get_pressed()[0]):
             self.RestarPensar(screen, agentes, 1)
             sonidoSusurrando.play()
+
+
+    def verificarFinDelJuego(self, screen, gameover):
+        if(GAME_OVER[0] == True):
+            screen.blit(gameover,(400,100))
+            pygame.time.wait(900)
+
 
 '''
         elif(pygame.mouse.get_pressed()[2]):
@@ -350,7 +358,7 @@ def main():
 
     background = agentes.load_image('imagenes/fondo.png')
     bandaDatos = agentes.load_image('imagenes/datos.png')
-
+    gameover = pygame.image.load('imagenes/gameOver.png')
     sonidoCaminando = pygame.mixer.Sound("sonidos/trotar.wav")
     sonidoSusurrando = pygame.mixer.Sound("sonidos/susurro.wav")
     sonidoMuerte = pygame.mixer.Sound("sonidos/morir.wav")
@@ -361,6 +369,7 @@ def main():
     agentes.AgregarPersonajes(agentes, agentes.equipo, screen)
 
     while True:
+
         pygame.mixer.music.rewind()
         screen.blit(bandaDatos,(0,400))
         screen.blit(background,(0,0))
@@ -379,7 +388,7 @@ def main():
                 sonidoSusurrando.stop()
 
 
-        agentes.MouseClick(screen, agentes, sonidoSusurrando, retos)
+        agentes.MouseClick(screen, agentes, sonidoSusurrando)
 
         print("------------------")
         agentes.ActualizarAtributos(screen, agentes)
@@ -387,9 +396,11 @@ def main():
 
         agentes.MovimientoTeclas(agentes, sonidoCaminando)
 
-        agentes.nivelEnJuego3(screen, agentes)
-        agentes.nivelEnJuego2(screen, agentes)
         agentes.nivelEnJuego1(screen, agentes)
+        agentes.nivelEnJuego2(screen, agentes)
+        agentes.nivelEnJuego3(screen, agentes)
+
+        agentes.verificarFinDelJuego(screen, gameover)
 
         pygame.display.update()
         pygame.display.flip()
