@@ -107,14 +107,14 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             aux = [20,11,15,13,7,9,11,2,9]
 
             for i in retos.hijos:
-                for j in range(3):
+                for j in range(len(retos.hijos)):
                     self.AgregarGvida(retos, aux.pop(), i.t)
             #self.AgregarGvida(retos, 20)
             #self.AgregarGvida(retos, 10)
             #self.AgregarGvida(retos, 15)
 
-            self.ImprimirRetos(retos, "-")
-            input("S T O P")
+            #self.ImprimirRetos(retos, "-")
+            #input("S T O P")
 
             mejor = self.mejorEleccion(agentes)
 
@@ -132,6 +132,16 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             self.ReiniciarRetos(retos)
             print("\n bloque 1 nivel 1")
 
+        Band1 = True
+
+        rec1 = (0,115,1300,0)
+
+        if Band1:
+            borde1 = pygame.draw.rect(screen, (0,0,0,0), rec1, 0)
+
+        if(borde1.colliderect(agentes)):
+            agentes.rect.top+=5
+
         elif(bloque2.colliderect(agentes)):
             pygame.time.delay(10000)
             self.RestartVida(screen, agentes, 1)
@@ -148,6 +158,16 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             retos.ReiniciarRetos(retos)
             print("\n bloque 2 nivel 1")
 
+        Band2 = True
+
+        rec2 = (0,245,1300,0)
+
+        if Band2:
+            borde2 = pygame.draw.rect(screen, (0,0,0,0), rec2, 0)
+
+        if(borde2.colliderect(agentes)):
+            agentes.rect.top+=5
+
         elif(bloque3.colliderect(agentes)):
             pygame.time.delay(20000)
             self.RestartVida(screen, agentes, 1)
@@ -163,6 +183,16 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             retos.ReiniciarRetos(retos)
             print("\n bloque 3 nivel 1")
+
+        Band3 = True
+
+        rec3 = (0,372,1300,0)
+
+        if Band3:
+            borde3 = pygame.draw.rect(screen, (0,0,0,0), rec3, 0)
+
+        if(borde3.colliderect(agentes)):
+            agentes.rect.top+=5
 
     def nivelEnJuego2(self, screen, agentes):
         nivel2 = pygame.image.load('imagenes/barda2.png')
@@ -260,7 +290,6 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             if agentes.rect.left == 0:
                 pass
             else:
-                sonidoCaminando.play()
                 agentes.rect.left -= agentes.speed
                 if (key[K_UP] or key[K_w]):
                     if agentes.rect.top == 0:
@@ -270,6 +299,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
                         agentes.rect.top -= agentes.speed
 
                 elif (key[K_DOWN] or key[K_s]):
+                    print(agentes.rect.top)
                     if agentes.rect.top == 429:
                         pass
                     else:
@@ -361,6 +391,13 @@ def main():
     pygame.init()
     agentes = Agentes(0,0,0,0,0)
 
+    color = (255,0,0,0)
+    rec1 = (0,0,1300,0)
+    rec2 = (0,0,1,650)
+    rec3 = (0,650,1300,0)
+    rec4 = (1299,0,0,650)
+    width = 0
+
     screen = pygame.display.set_mode((WIDTH, HEIGHT)) #,RESIZABLE vuelve la pantalla manipulable
 
     pygame.display.set_caption("Proyecto IA - 3Deaths")
@@ -410,6 +447,16 @@ def main():
         agentes.nivelEnJuego3(screen, agentes)
 
         agentes.verificarFinDelJuego(screen, gameover)
+
+        #borde1 = pygame.draw.rect(screen, color, rec1, width)
+        borde2 = pygame.draw.rect(screen, color, rec2, width)
+        borde3 = pygame.draw.rect(screen, color, rec3, width)
+        borde4 = pygame.draw.rect(screen, color, rec4, width)
+
+        #blocks_hit_list = pygame.sprite.spritecollide(agentes, borde1, True)
+
+        '''if(borde1.colliderect(agentes)):
+            agentes.rect.top+=5'''
 
         pygame.display.update()
         pygame.display.flip()
