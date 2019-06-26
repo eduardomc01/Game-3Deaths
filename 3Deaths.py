@@ -113,7 +113,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
         if(bloque1.colliderect(agentes)):
 
-            t = [3000, 1000, 5000]
+            t = [5000, 1000, 3000]
             for i in range(3):
                 self.AgregarTiempo(t.pop())
 
@@ -121,6 +121,8 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             for i in retos.hijos:
                 for j in range(len(retos.hijos)):
                     self.AgregarGvida(retos, v.pop(), i.t)
+
+            self.mas_optimo(retos)
 
             #self.ImprimirRetos(retos, "-")
             datos = self.mejorEleccionI(agentes)
@@ -132,7 +134,8 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             self.RestartVida(screen, agentes, 100)
 
             #print("------------------")
-            #retos.ImprimirRetos(retos,"-")
+            retos.ImprimirRetos(retos,"-")
+            input("S T O P")
             #print("------------------")
 
             agentes.rect.top += 60
