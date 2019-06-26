@@ -125,9 +125,10 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             self.mas_optimo(retos)
 
             #self.ImprimirRetos(retos, "-")
-            datos = self.mejorEleccionI(agentes)
-            print("--->",datos)
+            lista = self.mejorEleccionI(agentes)
+            #print("--->",lista)
 
+            self.tiempo_pensar(retos, lista)
             #input("S T O P")
 
             #pygame.time.delay(3000)
