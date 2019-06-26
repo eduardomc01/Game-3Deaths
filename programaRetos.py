@@ -17,7 +17,6 @@ class Retos():
         if(retos.t != None):
             if(retos.t == busq):
                 return retos
-
         else:
             for x in retos.hijos:
                 e = self.BusquedaNodoTiempo(x, busq)
@@ -28,6 +27,8 @@ class Retos():
     def ReiniciarRetos(self, retos):
         for i in retos.hijos:
             retos.hijos.pop()
+            return self.ReiniciarRetos(retos)
+
 
     def ImprimirRetos(self, retos, ident):
         if(retos.t != None):
