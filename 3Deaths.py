@@ -33,9 +33,9 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
         self.rect = self.image.get_rect()
 
-        self.i = i
-        self.n = n
-        self.c = c
+        self.i = i #inteligencia
+        self.n = n #nadado
+        self.c = c #correr
         self.vida = vida
         self.pensar = pensar
 
@@ -99,24 +99,20 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
         if(bloque1.colliderect(agentes)):
 
-            #for i in range(3):  #inteligencia, tiempo
-            self.AgregarTiempo(5000) #5 seg
-            self.AgregarTiempo(1000) #1 seg
-            self.AgregarTiempo(3000) #3 seg
+            t = [3000, 1000, 5000]
+            for i in range(3):
+                self.AgregarTiempo(t.pop())
 
-            aux = [20,11,15,13,7,9,11,2,9]
-
+            v = [20,11,15,13,7,9,11,2,9]
             for i in retos.hijos:
                 for j in range(len(retos.hijos)):
-                    self.AgregarGvida(retos, aux.pop(), i.t)
-            #self.AgregarGvida(retos, 20)
-            #self.AgregarGvida(retos, 10)
-            #self.AgregarGvida(retos, 15)
+                    self.AgregarGvida(retos, v.pop(), i.t)
 
             #self.ImprimirRetos(retos, "-")
-            #input("S T O P")
+            datos = self.mejorEleccionI(agentes)
+            print("--->",datos)
 
-            mejor = self.mejorEleccion(agentes)
+            input("S T O P")
 
             #pygame.time.delay(3000)
             self.RestartVida(screen, agentes, 100)
@@ -124,8 +120,6 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             #print("------------------")
             #retos.ImprimirRetos(retos,"-")
             #print("------------------")
-
-            #input("STOP")
 
             agentes.rect.top += 60
 
