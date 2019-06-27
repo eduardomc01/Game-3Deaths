@@ -59,10 +59,10 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             #print(agentes.i, agentes.n, agentes.c, agentes.vida, agentes.pensar)
             self.barras1(screen, agentes.vida, agentes.pensar)
             self.VidayPensar(screen, agentes)
-
         else:
             for n in agentes.equipo:
                 self.ActualizarAtributos(screen, n)
+
 
     def VidayPensar(self, screen, agentes):
         miFuente = pygame.font.SysFont("Arial", 20, True)
@@ -80,10 +80,6 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             if(agentes.vida <= 0):
                 GAME_OVER.pop()
                 GAME_OVER.append(True)
-                #pygame.time.delay(5000)
-                #miFuente = pygame.font.SysFont("Arial", 50)
-                #miTexto = miFuente.render("GAME OVER",0,(255, 0, 0))
-                #screen.blit(miTexto,(850, 530))
         else:
             for n in agentes.equipo:
                 self.RestartVida(screen, n, Rvida)
@@ -92,11 +88,9 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
     def RestarPensar(self, screen, agentes, Rpensar):
         agentes.pensar -= Rpensar
         if(agentes.i != 0):
-
             if(agentes.pensar <= 0):
                 GAME_OVER_LOCURA.pop()
                 GAME_OVER_LOCURA.append(True)
-
         else:
             for n in agentes.equipo:
                 self.RestarPensar(screen, n, Rpensar)
@@ -107,51 +101,36 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         screen.blit(nivel1,(0,50))
         transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
-        bloque1 = pygame.Rect(250,100,103,10)
-        bloque2 = pygame.Rect(630,100,103,10)
-        bloque3 = pygame.Rect(1040,100,103,10)
+        bloque1 = pygame.Rect(250,100,103,0)
+        bloque2 = pygame.Rect(630,100,103,0)
+        bloque3 = pygame.Rect(1040,100,103,0)
 
         if(bloque1.colliderect(agentes)):
 
-            #t = [5000, 1000, 3000]
             for i in range(3):
                 self.AgregarTiempo(random.randint(1000,10000))
 
-            #v = [20,11,15,13,7,9,11,2,9]
             for i in retos.hijos:
                 for j in range(len(retos.hijos)):
                     self.AgregarGvida(retos, random.randint(1,10), i.t)
 
             self.mas_optimo(retos)
 
-            #self.ImprimirRetos(retos, "-")
             lista = self.mejorEleccionI(agentes)
-            #print("--->",lista)
 
             self.tiempo_pensar(retos, lista)
-            #input("S T O P")
 
             self.hill_climbing(retos)
-            #print(self.hill_climbing(retos))
-            #print(optimos)
-            #input("S T O P")
-            #print(type(tiempos[0]))
-            #input("S T O P")
-            print("Menor ",self.optimos[0])
-            pygame.time.delay(int(self.tiempos[0]))
-            self.RestartVida(screen, agentes, self.optimos[0])
 
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
             del self.tiempos[:]
             del self.optimos[:]
-            #print("------------------")
-            retos.ImprimirRetos(retos,"-")
-            input("S T O P")
-            #print("------------------")
 
             agentes.rect.top += 60
 
             self.ReiniciarRetos(retos)
-            print("\n bloque 1 nivel 1")
+            ###############################################print("\n bloque 1 nivel 1")
 
         Band1 = True
         rec1 = (0,115,1300,0)
@@ -163,20 +142,31 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             agentes.rect.top+=5
 
         elif(bloque2.colliderect(agentes)):
-            pygame.time.delay(10000)
-            self.RestartVida(screen, agentes, 1)
 
             for i in range(3):
-                retos.AgregarRetos(20,10)
+                self.AgregarTiempo(random.randint(1000,10000))
 
-            #print("------------------")
-            #retos.ImprimirRetos(retos,"-")
-            #print("------------------")
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionI(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
 
             agentes.rect.top += 60
 
-            retos.ReiniciarRetos(retos)
-            print("\n bloque 2 nivel 1")
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 2 nivel 1")
 
         Band2 = True
         rec2 = (0,245,1300,0)
@@ -188,20 +178,31 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             agentes.rect.top+=5
 
         elif(bloque3.colliderect(agentes)):
-            pygame.time.delay(20000)
-            self.RestartVida(screen, agentes, 1)
 
             for i in range(3):
-                retos.AgregarRetos(5, 20)
+                self.AgregarTiempo(random.randint(1000,10000))
 
-            #print("------------------")
-            #retos.ImprimirRetos(retos,"-")
-            #print("------------------")
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionI(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
 
             agentes.rect.top += 60
 
-            retos.ReiniciarRetos(retos)
-            print("\n bloque 3 nivel 1")
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 3 nivel 1")
 
         Band3 = True
         rec3 = (0,372,1300,0)
@@ -212,62 +213,273 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         if(borde3.colliderect(agentes)):
             agentes.rect.top+=5
 
-
     def nivelEnJuego2(self, screen, agentes):
         nivel2 = pygame.image.load('imagenes/barda2.png')
         screen.blit(nivel2,(0,180))
         transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
-        bloque1 = pygame.Rect(90,190,100,50)
-        bloque2 = pygame.Rect(420,190,100,50)
-        bloque3 = pygame.Rect(810,190,100,50)
-        bloque4 = pygame.Rect(1100,190,100,50)
+        bloque1 = pygame.Rect(90,230,100,0)
+        bloque2 = pygame.Rect(420,230,100,0)
+        bloque3 = pygame.Rect(810,230,100,0)
+        bloque4 = pygame.Rect(1100,230,100,0)
 
         pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
 
         if(bloque1.colliderect(agentes)):
 
-            pygame.time.delay(2000)
-            agentes.rect.top += 101
-            #print("\n bloque 1 nivel 2")
+            for i in range(4):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionN(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 2 nivel 1")
 
         elif(bloque2.colliderect(agentes)):
-            print("\n bloque 2 nivel 2")
+
+            for i in range(4):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionN(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 2 nivel 2")
 
         elif(bloque3.colliderect(agentes)):
-            print("\n bloque 3 nivel 2")
+
+            for i in range(4):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionN(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 3 nivel 2")
 
         elif(bloque4.colliderect(agentes)):
-            print("\n bloque 4 nivel 2")
+
+            for i in range(4):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionN(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 4 nivel 2")
 
     def nivelEnJuego3(self, screen, agentes):
         nivel3 = pygame.image.load('imagenes/barda3.png')
         screen.blit(nivel3,(0,310))
         transparent = pygame.Surface((0,0),pygame.SRCALPHA)
 
-        bloque1 = pygame.Rect(5,320,75,50)
-        bloque2 = pygame.Rect(265,320,75,50)
-        bloque3 = pygame.Rect(600,320,90,50)
-        bloque4 = pygame.Rect(970,320,80,50)
-        bloque5 = pygame.Rect(1230,320,100,50)
+        bloque1 = pygame.Rect(5,370,75,0)
+        bloque2 = pygame.Rect(265,370,75,0)
+        bloque3 = pygame.Rect(600,370,90,0)
+        bloque4 = pygame.Rect(970,370,80,0)
+        bloque5 = pygame.Rect(1230,370,100,0)
 
         pygame.draw.rect(screen,(0,0,0), transparent.get_rect())
 
         if(bloque1.colliderect(agentes)):
-            print("\n bloque 1 nivel 3")
+
+            for i in range(5):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionC(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 1 nivel 3")
 
         elif(bloque2.colliderect(agentes)):
-            print("\n bloque 2 nivel 3")
+
+            for i in range(5):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionC(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 2 nivel 3")
 
         elif(bloque3.colliderect(agentes)):
-            print("\n bloque 3 nivel 3")
+
+            for i in range(5):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionC(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 3 nivel 3")
 
         elif(bloque4.colliderect(agentes)):
-            print("\n bloque 4 nivel 3")
+
+            for i in range(5):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionC(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 4 nivel 3")
 
         elif(bloque5.colliderect(agentes)):
-            print("\n bloque 5 nivel 3")
 
+            for i in range(5):
+                self.AgregarTiempo(random.randint(1000,10000))
+
+            for i in retos.hijos:
+                for j in range(len(retos.hijos)):
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
+
+            self.mas_optimo(retos)
+
+            lista = self.mejorEleccionC(agentes)
+
+            self.tiempo_pensar(retos, lista)
+
+            self.hill_climbing(retos)
+
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, int(self.optimos[0]/10))
+            del self.tiempos[:]
+            del self.optimos[:]
+
+            agentes.rect.top += 60
+
+            self.ReiniciarRetos(retos)
+            ###############################################print("\n bloque 5 nivel 3")
 
     def barras1(self, screen, vida, pensar):
         color2 = (40, 210, 250)
@@ -275,7 +487,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         pygame.draw.rect(screen, color2, rect2, 0)
 
         color1 = (255, 0, 0, 0)
-        rect1 = (98, 584, vida, 31) #el tercer parametro es la vida 500 = 100%
+        rect1 = (98, 584, vida, 31)
         pygame.draw.rect(screen, color1, rect1, 0)
 
     def MovimientoTeclas(self, agentes, sonidoCaminando):
@@ -340,12 +552,10 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             sys.exit()
             return 0
 
-
     def MouseClick(self, screen, agentes, sonidoSusurrando):
         if(pygame.mouse.get_pressed()[0]):
-            self.RestarPensar(screen, agentes, 1)
+            self.RestarPensar(screen, agentes, 27)
             sonidoSusurrando.play()
-
 
     def verificarFinDelJuego(self, screen, gameover, gameoverlocura):
         if(GAME_OVER[0] == True):
@@ -356,37 +566,8 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             screen.blit(gameoverlocura,(150,100))
             pygame.time.wait(900)
 
-
     def logotiposExtra(self, screen):
         screen.blit(pygame.image.load('imagenes/vidaypensar.png'),(0,0))
-        #screen.blit(pygame.transform.scale(pygame.image.load('imagenes/vidaypensar.png'),(50,50)),(0,0))
-        #screen.blit(pygame.transform.scale(pygame.image.load('imagenes/vida.png'),(75,75)),(5,545))
-
-        '''
-        elif(pygame.mouse.get_pressed()[2]):
-
-            pygame.display.set_mode((200, 200))
-            pygame.display.set_caption("Instrucciones del JUEGO")
-
-            while True:
-                for evento in pygame.event.get():
-                    if evento.type == QUIT:
-                        pygame.quit()
-                        sys.exit()
-                        return 0
-        '''
-        '''
-            if (evento.button == 1):
-                self.RestarPensar(screen, agentes, 50)
-                sonidoSusurrando.play()
-                print("boton izquierdo")
-
-            elif (evento.button == 2):
-                print("boton enmedio")
-
-            elif (evento.button == 3):
-                print("boton derecho")
-        '''
 
 def main():
     pygame.init()
@@ -404,9 +585,7 @@ def main():
     pygame.display.set_caption("Proyecto IA - 3Deaths")
 
     background = agentes.load_image('imagenes/fondo.png')
-
     footer = agentes.load_image('imagenes/footer.png')
-    #bandaInfo = agentes.load_image('imagenes/info.png')
 
     gameover = pygame.image.load('imagenes/gameOver.png')
     gameoverlocura = pygame.image.load('imagenes/locura.png')
@@ -427,7 +606,6 @@ def main():
         screen.blit(background,(0,0))
         screen.blit(agentes.image, agentes.rect)
 
-
         for evento in pygame.event.get():
             if evento.type == QUIT:
                 pygame.quit()
@@ -442,7 +620,6 @@ def main():
 
 
         agentes.MouseClick(screen, agentes, sonidoSusurrando)
-
         agentes.MovimientoTeclas(agentes, sonidoCaminando)
 
         agentes.nivelEnJuego1(screen, agentes)
@@ -451,23 +628,12 @@ def main():
 
         agentes.verificarFinDelJuego(screen, gameover, gameoverlocura)
 
-        #borde1 = pygame.draw.rect(screen, color, rec1, width)
-        borde2 = pygame.draw.rect(screen, color, rec2, width)
-        borde3 = pygame.draw.rect(screen, color, rec3, width)
-        borde4 = pygame.draw.rect(screen, color, rec4, width)
-
-        #blocks_hit_list = pygame.sprite.spritecollide(agentes, borde1, True)
-
-        '''
-        if(borde1.colliderect(agentes)):
-            agentes.rect.top+=5
-        '''
+        pygame.draw.rect(screen, color, rec2, width)
+        pygame.draw.rect(screen, color, rec3, width)
+        pygame.draw.rect(screen, color, rec4, width)
 
         agentes.logotiposExtra(screen)
-
-        print("------------------")
         agentes.ActualizarAtributos(screen, agentes)
-        print("------------------")
 
         pygame.display.update()
         pygame.display.flip()
