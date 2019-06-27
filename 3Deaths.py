@@ -26,9 +26,13 @@ GAME_OVER_LOCURA = [False]
 # ---------------------------------------------------------------------
 class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
-    def __init__(self, i, n, c, vida, pensar):
+    liderAhora = ["inteligente","nadador","bombero"]
+    numeroLider = 0
+
+    def __init__(self, i, n, c, vida, pensar, lider):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("imagenes/grupo.png")
+        self.lider = lider
+        self.image = pygame.image.load("imagenes/"+self.lider+".png")
         self.image = pygame.transform.scale(self.image,(100,50))
         self.speed = 5
 
@@ -43,22 +47,20 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         self.equipo = []
 
 
-    def load_image(self, filename, transparent=False):
-        image = pygame.image.load(filename)
-        image = image.convert()
-        return image
-
-
     def AgregarPersonajes(self, agentes, equipo, screen):
         for i in range(3):
-            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10),500, 200))
+            agentes.equipo.append(Agentes(random.randint(1,10),random.randint(1,10),random.randint(1,10),500, 200, "grupo"))
 
 
     def ActualizarAtributos(self, screen, agentes):
         if(agentes.i != 0):
             #print(agentes.i, agentes.n, agentes.c, agentes.vida, agentes.pensar)
+            #agentes.lider = "bombero"
+
             self.barras1(screen, agentes.vida, agentes.pensar)
             self.VidayPensar(screen, agentes)
+            self.intercambiarLider(screen,agentes)
+
         else:
             for n in agentes.equipo:
                 self.ActualizarAtributos(screen, n)
@@ -496,6 +498,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             if agentes.rect.left == 0:
                 pass
             else:
+                sonidoCaminando.play()
                 agentes.rect.left -= agentes.speed
                 if (key[K_UP] or key[K_w]):
                     if agentes.rect.top == 0:
@@ -505,7 +508,6 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
                         agentes.rect.top -= agentes.speed
 
                 elif (key[K_DOWN] or key[K_s]):
-                    print(agentes.rect.top)
                     if agentes.rect.top == 429:
                         pass
                     else:
@@ -554,8 +556,18 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
     def MouseClick(self, screen, agentes, sonidoSusurrando):
         if(pygame.mouse.get_pressed()[0]):
-            self.RestarPensar(screen, agentes, 27)
+            self.RestarPensar(screen, agentes, 1)
             sonidoSusurrando.play()
+
+        if(pygame.mouse.get_pressed()[2]):
+            self.numeroLider += 1
+            if(self.numeroLider == 3):
+                self.numeroLider = 0
+
+    def intercambiarLider(self, screen, agentes):
+        lider = pygame.image.load('imagenes/'+self.liderAhora[self.numeroLider]+'.png')
+        screen.blit(pygame.transform.scale(lider,(190,100)),(400,480))
+
 
     def verificarFinDelJuego(self, screen, gameover, gameoverlocura):
         if(GAME_OVER[0] == True):
@@ -571,7 +583,8 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
 def main():
     pygame.init()
-    agentes = Agentes(0,0,0,0,0)
+
+    agentes = Agentes(0,0,0,0,0,"grupo")
 
     color = (0,0,0,0)
     rec1 = (0,0,1300,0)
@@ -584,8 +597,14 @@ def main():
 
     pygame.display.set_caption("Proyecto IA - 3Deaths")
 
-    background = agentes.load_image('imagenes/fondo.png')
-    footer = agentes.load_image('imagenes/footer.png')
+    background = pygame.image.load('imagenes/fondo.png')
+    footer = pygame.image.load('imagenes/footer.png')
+
+    N1R1 = pygame.image.load('imagenes/matematicas.png')
+    N1R2 = pygame.image.load('imagenes/rompecabezas.png')
+    N1R3 = pygame.image.load('imagenes/geometria.png')
+
+    N1R4 = pygame.image.load('imagenes/llave.png')
 
     gameover = pygame.image.load('imagenes/gameOver.png')
     gameoverlocura = pygame.image.load('imagenes/locura.png')
@@ -604,6 +623,12 @@ def main():
         pygame.mixer.music.rewind()
         screen.blit(footer,(0,0))
         screen.blit(background,(0,0))
+
+        screen.blit(pygame.transform.scale(N1R1,(60,60)),(275,48))
+        screen.blit(pygame.transform.scale(N1R2,(80,60)),(638,48))
+        screen.blit(pygame.transform.scale(N1R3,(50,50)),(1060,50))
+        screen.blit(pygame.transform.scale(N1R4,(185,100)),(40,170))
+
         screen.blit(agentes.image, agentes.rect)
 
         for evento in pygame.event.get():
