@@ -1,4 +1,7 @@
+
 class Retos():
+    tiempos = []
+    optimos = []
     def __init__(self, t, gv, h):
         self.t = t
         self.gv = gv
@@ -36,6 +39,18 @@ class Retos():
         for i in retos.hijos:
             retos.hijos.pop()
             return self.ReiniciarRetos(retos)
+
+    def hill_climbing(self,retos):
+        for x in retos.hijos:
+            self.tiempos.append(x.t)
+            if x.t < self.tiempos[0] or self.tiempos == None:
+                self.tiempos = sorted(self.tiempos)
+                del self.optimos[:]
+            for y in x.hijos:
+                self.optimos.append(y.h)
+                self.optimos = sorted(self.optimos)
+        return self.tiempos,self.optimos
+
 
     def ImprimirRetos(self, retos, ident):
         if(retos.t != None):

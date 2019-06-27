@@ -77,7 +77,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
     def RestartVida(self, screen, agentes, Rvida):
         agentes.vida -= Rvida
         if(agentes.i != 0):
-            if(agentes.vida == 0):
+            if(agentes.vida <= 0):
                 GAME_OVER.pop()
                 GAME_OVER.append(True)
                 #pygame.time.delay(5000)
@@ -93,7 +93,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         agentes.pensar -= Rpensar
         if(agentes.i != 0):
 
-            if(agentes.pensar == 0):
+            if(agentes.pensar <= 0):
                 GAME_OVER_LOCURA.pop()
                 GAME_OVER_LOCURA.append(True)
 
@@ -113,14 +113,14 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
         if(bloque1.colliderect(agentes)):
 
-            t = [5000, 1000, 3000]
+            #t = [5000, 1000, 3000]
             for i in range(3):
-                self.AgregarTiempo(t.pop())
+                self.AgregarTiempo(random.randint(1000,10000))
 
-            v = [20,11,15,13,7,9,11,2,9]
+            #v = [20,11,15,13,7,9,11,2,9]
             for i in retos.hijos:
                 for j in range(len(retos.hijos)):
-                    self.AgregarGvida(retos, v.pop(), i.t)
+                    self.AgregarGvida(retos, random.randint(1,10), i.t)
 
             self.mas_optimo(retos)
 
@@ -131,9 +131,18 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
             self.tiempo_pensar(retos, lista)
             #input("S T O P")
 
-            #pygame.time.delay(3000)
-            self.RestartVida(screen, agentes, 100)
+            self.hill_climbing(retos)
+            #print(self.hill_climbing(retos))
+            #print(optimos)
+            #input("S T O P")
+            #print(type(tiempos[0]))
+            #input("S T O P")
+            print("Menor ",self.optimos[0])
+            pygame.time.delay(int(self.tiempos[0]))
+            self.RestartVida(screen, agentes, self.optimos[0])
 
+            del self.tiempos[:]
+            del self.optimos[:]
             #print("------------------")
             retos.ImprimirRetos(retos,"-")
             input("S T O P")
@@ -268,30 +277,6 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         color1 = (255, 0, 0, 0)
         rect1 = (98, 584, vida, 31) #el tercer parametro es la vida 500 = 100%
         pygame.draw.rect(screen, color1, rect1, 0)
-
-    '''
-    def barras2(screen,agentes):
-
-        color1 = (255,0,0,0)
-        rect1 = (10,570,400, 10)
-        color2 = (40, 210, 250)
-        rect2 = (10,580,400, 10)
-        width = 0
-
-        pygame.draw.rect(screen, color1, rect1, width)
-        pygame.draw.rect(screen, color2, rect2, width)
-
-    def barras3(screen,agentes):
-
-        color1 = (255,0,0,0)
-        rect1 = (10,610, 400, 10)
-        color2 = (40, 210, 250)
-        rect2 = (10,620, 400, 10)
-        width = 0
-
-        pygame.draw.rect(screen, color1, rect1, width)
-        pygame.draw.rect(screen, color2, rect2, width)
-    '''
 
     def MovimientoTeclas(self, agentes, sonidoCaminando):
         key = pygame.key.get_pressed()
