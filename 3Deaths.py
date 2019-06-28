@@ -574,7 +574,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
     def MouseClick(self, screen, agentes, sonidoSusurrando):
         if(pygame.mouse.get_pressed()[0]):
-            self.RestarPensar(screen, agentes, 20)
+            self.RestarPensar(screen, agentes, 10)
             sonidoSusurrando.play()
 
         if(pygame.mouse.get_pressed()[2]):
@@ -648,7 +648,6 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         if(pygame.draw.rect(screen, color, (1055, 317, 160, 0), 1).colliderect(agentes)):
             agentes.rect.top-=5
 
-
     def logotiposExtra(self, screen, barraVidaHabilidad):
         screen.blit(barraVidaHabilidad,(0,0))
 
@@ -668,6 +667,7 @@ def main():
 
     pygame.display.set_caption("Proyecto IA - 3Deaths")
 
+    logo = pygame.image.load('imagenes/logo.ico')
     background = pygame.image.load('imagenes/fondo.png')
     footer = pygame.image.load('imagenes/footer.png')
 
@@ -698,6 +698,7 @@ def main():
 
     pygame.mixer.music.load("sonidos/solve_puzzle.wav")
     pygame.mixer.music.play(100)
+    pygame.display.set_icon(logo)
 
     agentes.AgregarPersonajes(agentes, agentes.equipo, screen)
 
