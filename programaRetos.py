@@ -33,7 +33,7 @@ class Retos():
     def mas_optimo(self, retos):
         for x in retos.hijos:
             for y in x.hijos:
-                y.h = ((x.t + y.gv)/500)*200   
+                y.h = ((x.t + y.gv)/500)*200
 
     def ReiniciarRetos(self, retos):
         for i in retos.hijos:
@@ -56,11 +56,7 @@ class Retos():
         if(retos.t != None):
             print(ident, retos.t, retos.gv,retos.h)
 
-        #else:
         for n in retos.hijos:
             self.ImprimirRetos(n, ident + "-")
 
 retos = Retos(None,None,None)
-#retos.AgregarRetos(retos)
-#retos.ImprimirRetos(retos, "-")
-#input("Detener!")

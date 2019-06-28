@@ -762,7 +762,6 @@ def main():
         pygame.display.update()
         pygame.display.flip()
 
-        #return 0
 
 # ---------------------------------------------------------------------
 
