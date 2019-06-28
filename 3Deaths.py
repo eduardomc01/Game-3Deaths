@@ -10,13 +10,12 @@ from programaRetos import *
 
 import sys
 import random
-#import time
 
 #----------------------------------------------------------------------------
 
 # Global
 #--------------------------------------------------------------------------
-WIDTH = 1300   #1300
+WIDTH = 1300
 HEIGHT = 650
 GAME_OVER = [False]
 GAME_OVER_LOCURA = [False]
@@ -29,7 +28,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
     liderAhora = ["inteligente","nadador","bombero"]
     numeroLider = 0
 
-    def __init__(self, i, n, c, vida, pensar, lider):
+    def __init__(self, i, a, r, vida, pensar, lider):
         pygame.sprite.Sprite.__init__(self)
         self.lider = lider
         self.image = pygame.image.load("imagenes/"+self.lider+".png")
@@ -39,8 +38,8 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         self.rect = self.image.get_rect()
 
         self.i = i #inteligencia
-        self.n = n #nadado
-        self.c = c #correr
+        self.a = a #atletico
+        self.r = r #resistencia
         self.vida = vida
         self.pensar = pensar
 
@@ -54,12 +53,11 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
     def ActualizarAtributos(self, screen, agentes):
         if(agentes.i != 0):
-            #print(agentes.i, agentes.n, agentes.c, agentes.vida, agentes.pensar)
-            #agentes.lider = "bombero"
-
+            #print(agentes.lider)
             self.barras1(screen, agentes.vida, agentes.pensar)
             self.VidayPensar(screen, agentes)
             self.intercambiarLider(screen,agentes)
+            agentes.lider = self.liderAhora[self.numeroLider]
 
         else:
             for n in agentes.equipo:
@@ -69,10 +67,10 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
     def VidayPensar(self, screen, agentes):
         miFuente = pygame.font.SysFont("Arial", 20, True)
 
-        textoPensar = miFuente.render((str(agentes.pensar)+" %"),0,(0, 0, 0))
+        textoPensar = miFuente.render((str(agentes.pensar)+" %"),0,(255, 255, 255))
         screen.blit(textoPensar,(220, 526))
 
-        textoVida = miFuente.render((str(agentes.vida)+" %"),0,(0, 0, 0))
+        textoVida = miFuente.render((str(agentes.vida)+" %"),0,(255, 255, 255))
         screen.blit(textoVida,(310, 590))
 
 
@@ -133,6 +131,16 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.ReiniciarRetos(retos)
             ###############################################print("\n bloque 1 nivel 1")
+
+        Band0 = True
+        rec0 = (0,0,1300,0)
+
+        if Band0:
+            borde0 = pygame.draw.rect(screen, (0,0,0,0), rec0, 0)
+
+        if(borde0.colliderect(agentes)):
+            agentes.rect.top+=5
+
 
         Band1 = True
         rec1 = (0,115,1300,0)
@@ -215,6 +223,16 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         if(borde3.colliderect(agentes)):
             agentes.rect.top+=5
 
+
+        Band4 = True
+        rec4 = (0, 500, 1300, 0)
+
+        if Band4:
+            borde4 = pygame.draw.rect(screen, (0,0,0,0), rec4, 0)
+
+        if(borde4.colliderect(agentes)):
+            agentes.rect.top-=5
+
     def nivelEnJuego2(self, screen, agentes):
         nivel2 = pygame.image.load('imagenes/barda2.png')
         screen.blit(nivel2,(0,180))
@@ -238,7 +256,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionN(agentes)
+            lista = self.mejorEleccionA(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -265,7 +283,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionN(agentes)
+            lista = self.mejorEleccionA(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -292,7 +310,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionN(agentes)
+            lista = self.mejorEleccionA(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -319,7 +337,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionN(agentes)
+            lista = self.mejorEleccionA(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -359,7 +377,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionC(agentes)
+            lista = self.mejorEleccionR(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -386,7 +404,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionC(agentes)
+            lista = self.mejorEleccionR(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -413,7 +431,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionC(agentes)
+            lista = self.mejorEleccionR(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -440,7 +458,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionC(agentes)
+            lista = self.mejorEleccionR(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -467,7 +485,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
             self.mas_optimo(retos)
 
-            lista = self.mejorEleccionC(agentes)
+            lista = self.mejorEleccionR(agentes)
 
             self.tiempo_pensar(retos, lista)
 
@@ -556,7 +574,7 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
 
     def MouseClick(self, screen, agentes, sonidoSusurrando):
         if(pygame.mouse.get_pressed()[0]):
-            self.RestarPensar(screen, agentes, 1)
+            self.RestarPensar(screen, agentes, 20)
             sonidoSusurrando.play()
 
         if(pygame.mouse.get_pressed()[2]):
@@ -568,18 +586,71 @@ class Agentes(pygame.sprite.Sprite, programaGrupo.Grupo, programaRetos.Retos):
         lider = pygame.image.load('imagenes/'+self.liderAhora[self.numeroLider]+'.png')
         screen.blit(pygame.transform.scale(lider,(190,100)),(400,480))
 
-
     def verificarFinDelJuego(self, screen, gameover, gameoverlocura):
         if(GAME_OVER[0] == True):
             screen.blit(gameover,(400,100))
-            pygame.time.wait(900)
+            pygame.time.wait(1000)
 
         elif(GAME_OVER_LOCURA[0] == True):
             screen.blit(gameoverlocura,(150,100))
-            pygame.time.wait(900)
+            pygame.time.wait(1000)
 
-    def logotiposExtra(self, screen):
-        screen.blit(pygame.image.load('imagenes/vidaypensar.png'),(0,0))
+    def verificarGanarDelJuego(self, screen, agentes, win):
+        zonaGanadora = pygame.Rect(0, 400, 1300, 100)
+        if(zonaGanadora.colliderect(agentes)):
+            screen.blit(pygame.transform.scale(win,(500,500)),(380,50))
+
+    def NoPasarParedes(self, screen, agentes):
+
+        color = (155, 155, 255)
+        rect = (0, 50, 220, 0)
+
+        if(pygame.draw.rect(screen, color, (0, 53, 220, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (390, 53, 200, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (750, 53, 270, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+
+        if(pygame.draw.rect(screen, color, (1155, 53, 150, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (0, 187, 50, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (200, 187, 210, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (538, 187, 240, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (940, 187, 150, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (1230, 187, 150, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (90, 317, 170, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (350, 317, 240, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (700, 317, 255, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (700, 317, 255, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+        if(pygame.draw.rect(screen, color, (1055, 317, 160, 0), 1).colliderect(agentes)):
+            agentes.rect.top-=5
+
+
+    def logotiposExtra(self, screen, barraVidaHabilidad):
+        screen.blit(barraVidaHabilidad,(0,0))
 
 def main():
     pygame.init()
@@ -605,9 +676,21 @@ def main():
     N1R3 = pygame.image.load('imagenes/geometria.png')
 
     N1R4 = pygame.image.load('imagenes/llave.png')
+    N1R5 = pygame.image.load('imagenes/cofre.png')
+    N1R6 = pygame.image.load('imagenes/candado.png')
+    N1R7 = pygame.image.load('imagenes/busear.png')
+
+    N1R8 = pygame.image.load('imagenes/calor.png')
+    N1R9 = pygame.image.load('imagenes/correr.png')
+    N1R10 = pygame.image.load('imagenes/quemar.png')
+    N1R11 = pygame.image.load('imagenes/quemar-manos.png')
+    N1R12 = pygame.image.load('imagenes/cerillos.png')
 
     gameover = pygame.image.load('imagenes/gameOver.png')
     gameoverlocura = pygame.image.load('imagenes/locura.png')
+    win = pygame.image.load('imagenes/win.png')
+
+    barraVidaHabilidad = pygame.image.load('imagenes/vidaypensar.png')
 
     sonidoCaminando = pygame.mixer.Sound("sonidos/trotar.wav")
     sonidoSusurrando = pygame.mixer.Sound("sonidos/susurro.wav")
@@ -627,7 +710,17 @@ def main():
         screen.blit(pygame.transform.scale(N1R1,(60,60)),(275,48))
         screen.blit(pygame.transform.scale(N1R2,(80,60)),(638,48))
         screen.blit(pygame.transform.scale(N1R3,(50,50)),(1060,50))
+
         screen.blit(pygame.transform.scale(N1R4,(185,100)),(40,170))
+        screen.blit(pygame.transform.scale(N1R5,(60,60)),(440,180))
+        screen.blit(pygame.transform.scale(N1R6,(60,60)),(830,180))
+        screen.blit(pygame.transform.scale(N1R7,(60,60)),(1125,180))
+
+        screen.blit(pygame.transform.scale(N1R8,(50,50)),(10,315))
+        screen.blit(pygame.transform.scale(N1R9,(50,50)),(280,315))
+        screen.blit(pygame.transform.scale(N1R10,(50,50)),(620,315))
+        screen.blit(pygame.transform.scale(N1R11,(50,50)),(980,315))
+        screen.blit(pygame.transform.scale(N1R12,(50,50)),(1230,315))
 
         screen.blit(agentes.image, agentes.rect)
 
@@ -647,18 +740,24 @@ def main():
         agentes.MouseClick(screen, agentes, sonidoSusurrando)
         agentes.MovimientoTeclas(agentes, sonidoCaminando)
 
+        agentes.NoPasarParedes(screen, agentes)
+
         agentes.nivelEnJuego1(screen, agentes)
         agentes.nivelEnJuego2(screen, agentes)
         agentes.nivelEnJuego3(screen, agentes)
 
         agentes.verificarFinDelJuego(screen, gameover, gameoverlocura)
+        agentes.verificarGanarDelJuego(screen, agentes, win)
+
 
         pygame.draw.rect(screen, color, rec2, width)
         pygame.draw.rect(screen, color, rec3, width)
         pygame.draw.rect(screen, color, rec4, width)
 
-        agentes.logotiposExtra(screen)
+
+
         agentes.ActualizarAtributos(screen, agentes)
+        agentes.logotiposExtra(screen, barraVidaHabilidad)
 
         pygame.display.update()
         pygame.display.flip()

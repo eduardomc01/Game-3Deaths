@@ -15,13 +15,13 @@ class Grupo():
 
         return datos
 
-    def mejorEleccionN(self, agentes):
+    def mejorEleccionA(self, agentes):
         datos=[]
         maxN=[]
         prom =0
         for i in agentes.equipo:
-            maxN.append(i.n)
-            prom += i.n / len(agentes.equipo)
+            maxN.append(i.a)
+            prom += i.a / len(agentes.equipo)
             pensar = self.energia-i.pensar
         self.energia = self.energia - pensar
         datos.append(max(maxN))
@@ -29,13 +29,13 @@ class Grupo():
         datos.append(pensar)
 
         return datos
-    def mejorEleccionC(self, agentes):
+    def mejorEleccionR(self, agentes):
         datos=[]
         maxC=[]
         prom =0
         for i in agentes.equipo:
-            maxC.append(i.c)
-            prom += i.c / len(agentes.equipo)
+            maxC.append(i.r)
+            prom += i.r / len(agentes.equipo)
             pensar = self.energia-i.pensar
         self.energia = self.energia - pensar
         datos.append(max(maxC))
